@@ -1,0 +1,38 @@
+#Implementation Agreement CV-2x3-148
+#export geographic data if available, including latitude, longitude, elevation, address and true north
+def not_empty(o,attName,val)
+    if val == "$" or val =="''"
+        puts "<p>Missing attribute:<b>" + attName + "</b> for " + o.as_link + "</p>" 
+        return false
+    else
+        return true
+    end
+end
+
+HTML.h2 "Checking the implementation agreement CV-2x3-148"
+use 'Duplex_A_20110907.ifc';
+IFCSITE.where("all","o").each { |site|
+not_empty(site,"RefLatitude",site.refLatitude)
+not_empty(site,"RefLongitude",site.refLongitude)
+not_empty(site,"RefElevation",site.refElevation)
+}
+IFCGEOMETRICREPRESENTATIONCONTEXT.where("all","o").each { |o|
+    if not_empty(o,"TrueNorth",o.trueNorth)
+    
+    end
+}
+IFCBUILDING.where("all","o").each { |o|
+if o.buildingAddress  == "$" or o.buildingAddress  =="''"
+    HTML.h5  "BuildingAddress is not provided for " + o.as_link 
+elsif o.buildingAddress.to_obj.class != IFCPOSTALADDRESS
+    HTML.h5 "BuildingAddress must be an instance of IFCPOSTALADDRESS for" + o.as_link
+else
+    b_address =o.buildingAddress.to_obj
+    not_empty(b_address,"country",b_address.country)
+    not_empty(b_address,"postalCode",b_address.postalCode)
+    not_empty(b_address,"region",b_address.region)
+    not_empty(b_address,"town",b_address.town)
+    not_empty(b_address,"postalBox",b_address.postalBox)
+end
+}
+puts "<hr>"

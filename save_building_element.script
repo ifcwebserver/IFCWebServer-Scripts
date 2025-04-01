@@ -1,0 +1,482 @@
+#http://docs.buildingsmartalliance.org/MVD_COBIE/
+load_schema_and_extensions
+$ifc_model = "01_AstaOfficeBlock.ifc"
+use $ifc_model
+$created_on = get_header_info($ifc_model).time_stamp
+$created_by= "xx@xx.com"
+
+def add_cell(value,color)
+ puts "<td style='background-color:" + color + "'>" + value.to_s.gsub("'","") + "</td>"
+end
+
+def get_created_on(o)
+   #if o.ownerHistory.to_obj.creationDate != "0"
+       $created_on 
+end
+
+def get_created_by(o)
+    #s.ownerHistory.to_obj.owningUser.to_obj.thePerson.to_obj.id ##123321
+    $created_by
+end
+
+#create a hash index for space classification, it will be used for the description column
+$classification={}
+$space_classification={}
+$zone_classification={}
+$space_classification_name={}
+IFCRELASSOCIATESCLASSIFICATION.where("all" ,"o").each { |classification_rel|
+classification_rel.relatedObjects.toIfcObject.each { |kk,vv|
+$space_classification[vv.line_id] = classification_rel.relatingClassification.to_obj.itemReference if vv.class == IFCSPACE
+$zone_classification[vv.line_id] = classification_rel.relatingClassification.to_obj.name if vv.class == IFCZONE
+if vv.class == IFCSPACE
+    $space_classification_name[vv.line_id] = classification_rel.relatingClassification.to_obj.name
+else
+    $classification[vv.line_id] = classification_rel.relatingClassification.to_obj.name
+end
+}
+}
+#create a hash index for space container, it will be used for the FloorName column
+$space_parent={}
+IFCRELAGGREGATES.where("all" ,"o").each { |aggregate_rel|
+aggregate_rel.relatedObjects.toIfcObject.each { |kk,vv|
+$space_parent[vv.line_id]= aggregate_rel.relatingObject.to_obj.name if vv.class == IFCSPACE
+}
+}
+
+class Cobie
+    def self.cobie_contact
+        puts '<div id="Contact" class="tabcontent">'
+    	HTML.h1 "Contact"
+    	HTML.tableHeader "Email","CreatedBy","CreatedOn","Category","Company","Phone","ExternalSystem","ExternalObject","ExternalIdentifier","Department","OrganizationCode","GivenName","FamilyName","Street","PostalBox","Town","StateRegion","PostalCode","Country"
+    	IFCPERSONANDORGANIZATION.where("all","o").each { |o|
+    	begin
+    	row={}
+    	org=nil
+    	p=nil
+    	org=o.theOrganization.to_obj
+    	if org != nil
+    		if  org.addresses.to_obj.class == IFCTELECOMADDRESS
+    			row["Email"] = org.addresses.to_obj.electronicMailAddresses
+    			row["Phone"] = org.addresses.to_obj.telephoneNumbers
+    		else
+    			row["Email"] = "n/a"
+    			row["Phone"] = "n/a"
+    		end	
+    	row["CreatedBy"] = ""
+    	row["CreatedOn"] = get_created_on(org)
+    	if org.roles.to_obj != nil
+    	row["Category"] = org.roles.to_obj.userDefinedRole 
+    	else
+    	row["Category"] = "n/a" 
+    	end
+    	row["Company"] = org.name
+    	row["ExternalSystem"] = "n/a"
+    	row["ExternalObject"] = "n/a"
+    	row["ExternalIdentifier"] = "n/a"
+    	row["Department"] = org.description
+    	row["OrganizationCode"] = org.id
+    	else
+    	end
+    	p=o.thePerson.to_obj
+    	if p != nil
+    	  row["GivenName"] = p.givenName
+    	  row["FamilyName"] = p.familyName
+    	  if p.addresses.to_obj.class == IFCPOSTALADDRESS
+    	  adress=p.addresses.to_obj
+    	  row["Street"]=adress.addressLines
+    	  row["PostalBox"]=adress.postalBox
+    	  row["Town"]=""
+    	  row["StateRegion"]=adress.region
+    	  row["PostalCode"]=adress.postalCode
+    	  row["Country"]=adress.country  
+    	  end
+    	else
+    	end
+    	puts "<tr>"
+    	add_cell row["Email"],"#FFFF99"
+    	add_cell row["CreatedBy"],"#FFCC99"
+    	add_cell row["CreatedOn"],"#FFFF99"
+    	add_cell row["Category"],"#FFCC99"
+    	add_cell row["Company"],"#FFFF99"
+    	add_cell row["Phone"],"#FFFF99"
+    	add_cell row["ExternalSystem"],"#CC99FF"
+    	add_cell row["ExternalObject"],"#CC99FF"
+    	add_cell row["ExternalIdentifier"],"#CC99FF"
+    	add_cell row["Department"],"#CCFFCC"
+    	add_cell row["OrganizationCode"],"#CCFFCC"
+    	add_cell row["GivenName"] ,"#CCFFCC"
+    	add_cell row["FamilyName"] ,"#CCFFCC"
+    	add_cell row["Street"],"#CCFFCC"
+    	add_cell row["PostalBox"],"#CCFFCC"
+    	add_cell row["Town"],"#CCFFCC"
+    	add_cell row["StateRegion"],"#CCFFCC"
+    	add_cell row["PostalCode"],"#CCFFCC"
+    	add_cell row["Country"],"#CCFFCC"
+    
+    	rescue Exception => e
+    	  puts e.message  
+    	  puts e.backtrace.inspect
+    	end
+    	puts "</tr>"
+    	}
+    	puts "</table>"
+    	puts "</div>"
+    end
+    
+    def self.cobie_facility
+        puts '<div id="Facility" class="tabcontent">'
+    	HTML.h1 "Facility"
+    	HTML.tableHeader "ID","Name","CreatedBy","CreatedOn","Category","ProjectName","SiteName","LinearUnits","AreaUnits","VolumeUnits","CurrencyUnit","AreaMeasurement","ExternalSystem","ExternalProjectObject","ExternalProjectIdentifier","ExternalSiteObject","ExternalSiteIdentifier","ExternalFacilityObject","ExternalFacilityIdentifier","Description","ProjectDescription","SiteDescription","Phase"
+    	IFCPROJECT.where("all","o").each_with_index { |o,id|
+    	begin
+    	puts "<tr>"
+    	puts "<th>#{id + 1}</th>"
+    	add_cell o.name, "#FFFF99"
+    	add_cell get_created_by(o), "#FFCC99"
+    	add_cell get_created_on(o), "#FFFF99"
+    	#Category
+    	add_cell "", "#FFCC99"
+    	#ProjectName
+    	add_cell IFCRELAGGREGATES.where("o.relatedObjects.include?(\"#" + o.line_id.to_s + "\")" ,"o.relatingObject.to_obj.name").join, "#FFFF99"
+    	#SiteName
+    	add_cell o.name, "#FFFF99"
+    	#LinearUnits
+    	add_cell "", "#FFCC99"
+    	#AreaUnits
+    	add_cell "", "#FFCC99"
+    	#VolumeUnits
+    	add_cell "", "#FFCC99"
+    	#CurrencyUnit
+    	add_cell "", "#FFCC99"
+    	#AreaMeasurement
+    	add_cell "", "#FFCC99"
+    	#ExternalSystem
+    	add_cell o.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#FFCC99"
+    	#ExternalProjectObject
+    	add_cell "", "#FFCC99"
+    	#ExternalProjectIdentifier
+    	add_cell o.globalId, "#FFCC99"
+    	#ExternalFacilityObject
+    	add_cell "", "#FFCC99"
+    	#ExternalFacilityIdentifier
+    	add_cell "", "#FFFF99"
+    	#Description
+    	add_cell "", "#CC99FF"
+    	#ProjectDescription
+    	add_cell "", "#CC99FF"
+    	#SiteDescription
+    	add_cell "", "#CC99FF"
+    	#Phase
+    	add_cell o.phase, "#CCFFCC"
+    	rescue Exception => e
+    	  puts e.message  
+    	  puts e.backtrace.inspect
+    	end  
+    	puts "</tr>"
+    	}
+    	puts "</table>"
+    	puts "</div>"
+    end
+    
+    def self.cobie_floor
+        puts '<div id="Floor" class="tabcontent">'
+    	HTML.h1 "Floor"
+    	HTML.tableHeader "Name","CreatedBy","CreatedOn","Category","ExtSystem","ExtObject","ExtIdentifier","Description","Elevation","Height"
+    	IFCBUILDINGSTOREY.where("all","o").each { |o|
+    	begin
+    	puts "<tr>"
+    	add_cell o.name, "#FFFF99"
+    	add_cell get_created_by(o), "#FFCC99"
+    	add_cell get_created_on(o), "#FFFF99"
+    	add_cell $classification[o.line_id], "#FFCC99"
+    	add_cell o.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#FFCC99"
+    	add_cell $ifcClassesNames[o.class.to_s], "#CC99FF"
+    	add_cell o.globalId, "#CC99FF"
+    	add_cell o.description, "#CCFFCC"
+    	add_cell o.elevation, "#CCFFCC"
+    	add_cell "", "#CCFFCC"
+        rescue Exception => e
+    	  puts e.message  
+    	  puts e.backtrace.inspect
+    	end 
+    	puts "</tr>"
+    	}
+    	puts "</table>"
+    	puts "</div>"
+    end
+    
+    def self.cobie_space
+        puts '<div id="Space" class="tabcontent">'
+        HTML.h1 "Space"
+    	HTML.tableHeader "ID","Name","CreatedBy","CreatedOn","Category","FloorName","Description","ExtSystem","ExtObject","ExtIdentifier","RoomTag","UsableHeight","GrossArea","NetArea"
+    	IFCSPACE.where("all","o").each_with_index { |s,id|
+    	begin
+    	puts "<tr>"
+        puts "<th>#{id + 1}</th>"
+    	#Name
+    	add_cell s.name + "(" + s.longName + ")", "#FFFF99"
+    	add_cell get_created_by(s), "#FFFF99"
+        add_cell get_created_on(s), "#FFCC99"
+    	
+    	#Category
+    	add_cell $space_classification[s.line_id].to_s + ":" + $space_classification_name[s.line_id].to_s, "#FFFF99"
+    	#FloorName
+    	add_cell $space_parent[s.line_id].to_s, "#FFCC99"
+    	#add_cell s.description, "#FFFF99"
+    	add_cell $space_classification_name[s.line_id].to_s, "#FFFF99"
+    	add_cell s.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#CC99FF"
+    	add_cell $ifcClassesNames[s.class.to_s], "#CC99FF"
+    	add_cell s.globalId, "#CC99FF"
+    	#RoomTag
+    	add_cell s.longName, "#CCFFCC"
+    	
+    	#UsableHeight
+    	add_cell run_sql($username,$ifc_model,"select PropertyValue  from 'Properties' where STEP_ID = #{s.line_id} and PropertyName = 'Height'"), "#CCFFCC"
+    	#GrossArea
+    	add_cell run_sql($username,$ifc_model,"select PropertyValue  from 'Properties' where STEP_ID = #{s.line_id} and PropertyName = 'GrossFloorArea'"), "#CCFFCC"
+    	#NetArea
+    	add_cell run_sql($username,$ifc_model,"select PropertyValue  from 'Properties' where STEP_ID = #{s.line_id} and PropertyName = 'NetFloorArea'"), "#CCFFCC"
+    	 rescue Exception => e
+    	  puts e.message  
+    	  puts e.backtrace.inspect
+    	end 
+    	puts "</tr>"
+    	}
+    	puts "</table>"
+    	puts "</div>"
+    end
+    
+    def self.cobie_zone
+        puts '<div id="Zone" class="tabcontent">'
+    	HTML.h1 "Zone"
+    	HTML.tableHeader "Name","CreatedBy","CreatedOn","Category","SpaceNames","ExtSystem","ExtObject","ExtIdentifier","Description"
+    	IFCZONE.where("all","o").each { |z|
+    	begin
+    	puts "<tr>"
+    	add_cell z.name, "#FFFF99"
+    	add_cell get_created_by(z), "#FFCC99"
+    	add_cell get_created_on(z), "#FFFF99"
+    	add_cell $zone_classification[z.line_id], "#FFCC99"
+    	add_cell IFCRELASSIGNSTOGROUP.where("o.relatingGroup.to_obj.line_id ==" + z.line_id.to_s,"o.relatedObjects").join.toIfcObject.values.map { |s| s.name}.join("<br>"),"#FFCC99"
+    	add_cell z.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#FFCC99"
+    	add_cell $ifcClassesNames[z.class.to_s], "#CC99FF"
+    	add_cell z.globalId, "#CC99FF"
+    	add_cell z.description, "#FFFF99"
+    
+    	rescue Exception => e
+    	  puts e.message  
+    	  puts e.backtrace.inspect
+    	end 
+    	puts "</tr>"
+    	}
+    	puts "</table>"
+    	puts "</div>"
+    end
+    
+    def self.cobie_type
+        puts '<div id="Type" class="tabcontent">'
+    	HTML.h1 "Type"
+    	HTML.tableHeader "ID","Name","CreatedBy","CreatedOn","Category","Description","AssetType","Manufacturer","ModelNumber","WarrantyGuarantorParts","WarrantyDurationParts","WarrantyGuarantorLabor","WarrantyDurationLabor","WarrantyDurationUnit","ExtSystem","ExtObject","ExtIdentifier","ReplacementCost","ExpectedLife","DurationUnit","WarrantyDescription","NominalLength","NominalWidth","NominalHeight","ModelReference","Shape","Size","Color","Finish","Grade","Material","Constituents","Features","AccessibilityPerformance","CodePerformance","SustainabilityPerformance"
+    	IFCELEMENTTYPE.where("all","o").each_with_index { |o,id|
+    	begin
+    	puts "<tr>"
+    	puts "<th>#{id + 1}</th>"
+    	add_cell o.name, "#FFFF99"
+    	add_cell o.ownerHistory.to_obj.owningUser.to_obj.thePerson.to_obj.id, "#FFCC99"
+    	add_cell get_created_on(o), "#FFFF99"
+    	add_cell $classification[o.line_id], "#FFCC99"
+    	add_cell o.description, "#FFFF99"
+    	add_cell "AssetType?","#FFCC99"
+    	add_cell "Manufacturer?","#FFCC99"
+    	add_cell "ModelNumber?","#FFFF99"
+    	add_cell "WarrantyGuarantorParts?","#FFCC99"
+    	add_cell "WarrantyDurationParts?","#FFFF99"
+    	add_cell "WarrantyGuarantorLabor?","#FFCC99"
+    	add_cell "WarrantyDurationLabor?","#FFFF99"
+    	add_cell "WarrantyDurationUnit?","#FFCC99"
+    	add_cell o.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#CC99FF"
+    	add_cell $ifcClassesNames[o.class.to_s], "#CC99FF"
+    	add_cell o.globalId, "#CC99FF"
+    	add_cell "ReplacementCost?","#CCFFCC"
+    	add_cell "ExpectedLife?","#CCFFCC"
+    	add_cell "WarrantyDurationUnit?","#FFCC99"
+    	add_cell "DurationUnit?","#CCFFCC"
+    	add_cell "WarrantyDescription?","#FFCC99"
+    	add_cell "NominalLength?","#FFFF99"
+    	add_cell "NominalWidth?","#FFFF99"
+    	add_cell "NominalHeight?","#FFFF99"
+    	add_cell "ModelReference?","#CCFFCC"
+    	add_cell "Shape?","#CCFFCC"
+    	add_cell "Size?","#CCFFCC"
+    	add_cell "Color?","#CCFFCC"
+    	add_cell "Grade?","#CCFFCC"
+    	add_cell "Material?","#CCFFCC"
+    	add_cell "Constituents?","#CCFFCC"
+    	add_cell "Features?","#CCFFCC"
+    	add_cell "AccessibilityPerformance?","#CCFFCC"
+    	add_cell "CodePerformance?","#CCFFCC"
+    	add_cell "SustainabilityPerformance?","#CCFFCC"
+    	rescue Exception => e
+    	  puts e.message  
+    	  puts e.backtrace.inspect
+    	end 
+    	puts "</tr>"
+    	}
+    	puts "</table>"
+    	puts "</div>"
+    end
+    
+    def self.cobie_system
+    	HTML.h1 "System"
+    	HTML.tableHeader "Name","CreatedBy","CreatedOn","Category","ComponentNames","ExtSystem","ExtObject","ExtIdentifier","Description"
+    	IFCSYSTEM.where("all","o").each { |o|
+    	begin
+    	puts "<tr>"
+    	add_cell o.name, "#FFFF99"
+    	add_cell o.ownerHistory.to_obj.owningUser.to_obj.thePerson.to_obj.id, "#FFCC99"
+    	add_cell get_created_on(o), "#FFFF99"
+    	add_cell $classification[o.line_id], "#FFCC99"
+    	add_cell IFCRELASSIGNSTOGROUP.where("o.relatingGroup.to_obj.line_id ==" + o.line_id.to_s,"o.relatedObjects").join.toIfcObject.values.map { |s| s.name}.join("<br>"),"#FFCC99"
+    	add_cell o.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#FFCC99"
+    	add_cell $ifcClassesNames[o.class.to_s], "#CC99FF"
+    	add_cell o.globalId, "#CC99FF"
+    	add_cell o.description, "#FFFF99"
+    	rescue Exception => e
+    	  puts e.message  
+    	  puts e.backtrace.inspect
+    	end 
+    	puts "</tr>"
+    	}
+    	puts "</table><hr>"
+    end
+    
+    def self.cobie_assembly
+    	HTML.h1 "Assembly"
+    	HTML.tableHeader "Name","CreatedBy","CreatedOn","SheetName","ParentName","ChildNames","AssemblyType","ExtSystem","ExtObject","ExtIdentifier","Description"
+    	IFCRELPROJECTSELEMENT.where("all","o").each { |o|
+    	puts "<tr>"
+    	add_cell o.name, "#FFFF99"
+    	add_cell o.ownerHistory.to_obj.owningUser.to_obj.thePerson.to_obj.id, "#FFCC99"
+    	add_cell get_created_on(o), "#FFFF99"
+    	add_cell $ifcClassesNames[o.relatingElement.to_obj.class.to_s], "#FFCC99"
+    	add_cell o.relatingElement.to_obj.as_link, "#FFCC99"
+    	add_cell o.relatedFeatureElement,"#FFCC99"
+    	add_cell "AssemblyType?","#FFCC99"
+    	add_cell o.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#CC99FF"
+    	add_cell $ifcClassesNames[o.class.to_s],"#FFCC99"
+    	add_cell o.globalId, "#CC99FF"
+    	add_cell o.description, "#CCFFCC"
+    	puts "</tr>"
+    	}
+    	puts "</table><hr>"
+    end
+    
+    def self.cobie_document
+        puts '<div id="Document" class="tabcontent">'
+    	HTML.h1 "Document"
+    	HTML.tableHeader "Name","CreatedBy","CreatedOn","Category","ApprovalBy","Stage","SheetName","RowName","Directory","File","ExtSystem","ExtObject","ExtIdentifier","Description","Reference"
+    	IFCRELASSOCIATESDOCUMENT.where("all","o").each { |o|
+    	begin
+    	puts "<tr>"
+    	add_cell o.name, "#FFFF99"
+    	add_cell o.ownerHistory.to_obj.owningUser.to_obj.thePerson.to_obj.id, "#FFCC99"
+    	add_cell get_created_on(o), "#FFFF99"
+    	add_cell o.relatingDocument.to_obj.purpose, "#FFCC99"
+    	add_cell o.relatingDocument.to_obj.documentOwner.to_obj.thePerson.to_obj.id,"#FFCC99"
+    	add_cell o.relatingDocument.to_obj.intendedUse,"#FFCC99"
+    	add_cell "SheetName?","#FFCC99"
+    	add_cell "RowName?","#FFCC99"
+    	add_cell o.relatingDocument.to_obj.location,"#FFFF99"
+    	add_cell o.relatingDocument.to_obj.name,"#FFFF99"
+    	add_cell o.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#CC99FF"
+    	add_cell o.relatedObjects, "#CC99FF"
+    	add_cell o.globalId, "#CC99FF"
+    	add_cell o.description, "#CCFFCC"
+    	add_cell o.relatingDocument.to_obj.documentId, "#CCFFCC"
+    	rescue Exception => e
+    	  puts e.message  
+    	  puts e.backtrace.inspect
+    	end 
+    	puts "</tr>"
+    	}
+    	puts "</table>"
+    	puts "</div>"
+    end
+    
+    def self.cobie_attribute
+    	HTML.h1 "Attribute"
+    	HTML.tableHeader "ID","Name","CreatedBy","CreatedOn","Category","SheetName","RowName","Value","Unit","ExtSystem","ExtObject","ExtIdentifier","Description","AllowedValues"
+    	IFCPROPERTYSET.where("all","o").each_with_index { |o,id|
+    	o.hasProperties.to_s.toIfcObject.each do |k,v|
+    		if v.class == IFCPROPERTYSINGLEVALUE and v.nominalValue != "$"
+    		 begin
+    		puts "<tr>"
+    		add_cell id, "#FFFFFF"
+    		add_cell v.name, "#FFFF99"
+    		add_cell o.ownerHistory.to_obj.owningUser.to_obj.thePerson.to_obj.id, "#FFCC99"
+    		add_cell get_created_on(o), "#FFFF99"
+    		add_cell $classification[o.line_id], "#FFCC99"
+    		add_cell "SheetName", "#FFCC99"
+    		add_cell "RowName", "#FFCC99"
+    		add_cell v.valid_value, "#FFFF99"
+    		add_cell v.unit, "#FFFF99"
+    		add_cell o.ownerHistory.to_obj.owningApplication.to_obj.applicationFullName, "#FFCC99"
+    		add_cell o.name, "#CC99FF"
+    		add_cell o.globalId, "#CC99FF"
+    		add_cell v.description, "#CCFFCC"
+    		add_cell "AllowedValues", "#CCFFCC"	
+    		rescue Exception => e
+    	      puts e.message  
+    	      puts e.backtrace.inspect
+    	    end 
+    		puts "</tr>"
+    		end
+    	end
+    	}
+    	puts "</table><hr>"
+    end
+
+    def self.cobie_spare
+    	HTML.h1 "Spare"
+    end
+    
+    def self.cobie_resource
+    	HTML.h1 "Resource"
+    end
+    
+    def self.cobie_job
+    	HTML.h1 "Job"
+    end
+    
+    def self.cobie_impact
+    	HTML.h1 "Impact"
+    end
+    
+    def self.cobie_coordinate
+    	HTML.h1 "Coordinate"
+    end
+    
+    def self.cobie_connection
+    	HTML.h1 "Connection"
+    end
+    
+    def self.cobie_issue
+    	HTML.h1 "Issue"
+    end
+
+end
+
+#TODO: ["Component","System","Assembly","Connection","Spare","Resource","Job","Impact",,"Attribute","Coordinate","Issue","PickLists"]
+puts "<div class='tab'>"
+["Instruction","Contact","Facility","Floor",
+"Space","Zone","Type","Document"].each { |tab_name|
+puts "<button class='tablinks' onclick=\"openTab(event, '#{tab_name}')\">#{tab_name}</button>"
+}
+puts "</div>"
+Cobie.cobie_contact
+Cobie.cobie_facility
+Cobie.cobie_floor
+Cobie.cobie_space
+Cobie.cobie_zone
+Cobie.cobie_type
+Cobie.cobie_document

@@ -1,0 +1,26 @@
+psets_for_class="IfcSpace"
+use "ifc2x4_rc3-templates.ifc"
+HTML.h2 "PropertySetTemplates for: " + psets_for_class
+divs={}
+IFCPROPERTYSETTEMPLATE.where("all","o").each { |pST|
+ applicable=false
+ pST.applicableEntity.split(",").each { |c|
+ ifcClassName=  c.upcase.scan(/(\IFC[A-Z0-9]*)/)123321
+ ifcClass=Kernel.const_get(ifcClassName.join.upcase.strip)
+  applicable=true if ifcClass != nil and ifcClass.to_s == psets_for_class.upcase
+   if ifcClass != nil and applicable == false
+     ifcClass.subclasses.each { |sc|
+      applicable=true if sc.to_s == psets_for_class.upcase 
+     }
+   end
+   }
+ if applicable== true
+	divs[pST.name] = [] if divs[pST.applicableEntity.to_s] == nil
+	divs[pST.name] <<  pST.propertyTemplates_html.to_s + "</br>" + "Applicable for :"  + pST.applicableEntity 
+  end
+}
+puts "<div id='tabs'><ul>"
+divs.keys.sort.each { |k|  puts "<li><a href='#" + k + "'>" + k + "</a></li>"}
+puts "</ul>"
+divs.each { |k,v| puts "<div id='" + k + "'>" + v.join + "</div>"}
+puts "</div>"

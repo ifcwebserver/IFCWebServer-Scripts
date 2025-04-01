@@ -1,0 +1,68 @@
+
+#Script parameters:
+bim_model = "Duplex_A_20110907.ifc"
+#configuration variables
+$baseURL="http://www.ifcwebserver.org"
+$ignored_atts=[]
+$ignored_atts << "@line_id"
+$ignored_atts << "@ownerHistory"
+$ignored_atts << "@ext_Type_HasPropertySets"
+$ignored_atts << "@objectPlacement"
+$ignored_atts << "@representation"
+$ignored_atts << "@representationContexts"
+$ignored_atts << "@unitsInContext"
+ 
+$report_classes=[]
+$report_classes << IFCPROJECT
+$report_classes << IFCPERSON
+$report_classes << IFCSPATIALSTRUCTUREELEMENT
+$report_classes << IFCZONE
+$report_classes << IFCBUILDINGELEMENT
+$report_classes << IFCFURNISHINGELEMENT
+#helper methods
+def link_to_3d(obj)
+    if obj.respond_to?('globalId') and File.exists?("temp/#$username/#$ifc_file_name/png/" + obj.globalId.gsub("'","") + ".png")
+        puts "<tr><td>"
+        puts "<a href='#$baseURL/sgl/?url=../temp/#$username/#$ifc_file_name/dae/" + obj.globalId.gsub("'","") + "'>3D Preview</a></td>"
+        puts "<td align=center style='background-color:#FFFFFF;'>"
+        puts "<a href='#$baseURL/sgl/?url=../temp/#$username/#$ifc_file_name/dae/" + obj.globalId.gsub("'","") + "'>"
+        puts "<img width=100 src='/temp/#$username/#$ifc_file_name/png/" + obj.globalId.gsub("'","") + ".png' /></a>"
+        puts "</td></tr>"
+    end
+end
+ 
+def do_it(cls)
+    HTML.h1  $ifcClassesNames[cls.to_s] + "(" + cls.count.to_s + ")" if cls.count != nil
+    cls.subclasses.each { |subCls| do_it subCls }
+    cls.where("all","o").each { |o|
+        next if $done[o.line_id] != nil
+        $done[o.line_id]=true
+        puts "<h3>" +  o.as_link.sub("/ifc.rb",$baseURL + "/ifc.rb")
+        puts " " + o.name.to_s.gsub("'","") if o.respond_to?('name')
+        puts "</h3>"
+        HTML.tableHeader "Property Name","Value"
+        link_to_3d o
+        o.instance_variables.sort.each do |i| 
+            next if o.instance_variable_get(i).to_s == "$" or $ignored_atts.include?(i.to_s)
+            if o.instance_variable_get(i).instance_of?(Array) then #TODO
+            elsif o.instance_variable_get(i).instance_of?(Hash) then #TODO
+            else           
+                HTML.arr_to_row  [i.to_s.sub("@","").sub("ext_","").capitalize1,o.instance_variable_get(i).to_s.gsub("'","")]
+            end
+        end
+        puts "</table>"
+    }
+end
+ 
+load_schema_and_extensions
+$done={}
+$loading_relation == true
+use bim_model
+puts "<div align='center' style='margin:50px'><img width=300 src='/cache/#$username/#$ifc_file_name/#$ifc_file_name.png' /><br>#$ifc_file_name</div>"
+to_be_loaded_classes=[]
+$report_classes.each { |c| 
+to_be_loaded_classes << c
+to_be_loaded_classes << c.subclasses 
+}
+load_classes to_be_loaded_classes.uniq.join("|") + "IFCRELCONTAINEDINSPATIALSTRUCTURE|IFCRELDEFINESBYTYPE|IFCRELDEFINESBYPROPERTIES|IFCRELASSOCIATESMATERIAL|IFCPROPERTYSET|"
+$report_classes.each { |c| do_it c }

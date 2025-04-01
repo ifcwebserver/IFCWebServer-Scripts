@@ -1,0 +1,7 @@
+use "BOQ-Trendy trend Easy-17.ifc"
+$dae_single_file= true
+output_file='temp/' + $username + "/" + $ifc_file_name
+$dae_geometry_file = File.open(output_file + "_geometry" + '.dae', 'w')
+$dae_node_file = File.open(output_file + "_nodes" +  '.dae', 'w')
+IFCOPENSHELL.where("all","o.to_dae")
+Dae.save_file(output_file)

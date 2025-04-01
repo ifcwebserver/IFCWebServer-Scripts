@@ -1,0 +1,73 @@
+
+<!-- saved from url=(0028)http://localhost/console.rb# -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="./Statsbygg_BIM_requirements_verification_files/style.css">
+<script type="text/javascript" src="./Statsbygg_BIM_requirements_verification_files/common.js"></script>
+<script type="text/javascript" src="./Statsbygg_BIM_requirements_verification_files/css.js"></script>
+<script type="text/javascript" src="./Statsbygg_BIM_requirements_verification_files/standardista-table-sorting.js"></script>
+<script type="text/javascript" src="./Statsbygg_BIM_requirements_verification_files/shCore.js"></script>
+<script type="text/javascript" src="./Statsbygg_BIM_requirements_verification_files/shBrushRuby.js"></script>
+<script src="./Statsbygg_BIM_requirements_verification_files/shBrushXml.js" type="text/javascript"></script>
+<script src="./Statsbygg_BIM_requirements_verification_files/prototype.js" type="text/javascript"></script>
+<link href="./Statsbygg_BIM_requirements_verification_files/shCore.css" rel="stylesheet" type="text/css">
+<link href="./Statsbygg_BIM_requirements_verification_files/shThemeDefault.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<script type="text/javascript">
+function dispHandle(obj) 
+{
+if (obj.style.display == "none")
+obj.style.display = "";
+else
+obj.style.display = "none";
+}
+</script>
+<form action="" method="POST">
+<h3>Script console:</h3>
+<textarea cols="155" rows="15" name="q" style="background-color:black;color:white">#This script shows how to validate some requirements of BIM modles according to 
+#the Norwegian Agency of Public Construction and Property BIM manual: http://www.statsbygg.no/bim
+use 'Blueberry090812.Ifc';
+load '|IFCPROJECT|IFCSITE|IFCBUILDINGSTOREY|IFCSPACE|'
+
+HTML.h3 "Ref#11"
+HTML.h4 "One and only project object shall be present for each project"
+if  IFCPROJECT.count != 1 then
+   puts "&lt;font color=red&gt;not passed&lt;/font&gt;"
+end
+
+
+HTML.h3 "Ref#12"
+if  IFCSITE.count == 1 then
+   puts "One and only site object shall be present for each project....Ok"
+else
+   puts "One and only site object shall be present for each project....not passed"
+end
+if IFCSITE.where("all","o.landTitleNumber").join == "$" then
+	puts "&lt;br&gt;&lt;font color='red'&gt;The site name shall contain the official ID of the Cadastral number&lt;/font&gt;"
+end
+
+HTML.h3 "Ref#14"
+HTML.h4 "The storey names shall be an integer numbers starting from 1 at the lowest floor level and incrementing by one for each floor level"
+arr = IFCBUILDINGSTOREY.where("all","[o.elevation,o.name]")
+i = 1
+arr.sort.each {|f| 
+puts "&lt;font color=red&gt;Floor" + i.to_s + "..current used name:&lt;b&gt;" + f[1].to_s  + "&lt;/b&gt; has to be changed to be:&lt;b&gt;" + i.to_s + "&lt;/b&gt;&lt;br&gt;&lt;/font&gt;" if f[2].to_s != i.to_s
+i+= 1 }
+</textarea><br>
+<p>Password:<input name="password" type="password" size="6" maxlength="8">
+<input type="submit" value="Go !"></p>
+</form>
+<h3>Ref#11</h3>
+<h4>One and only project object shall be present for each project</h4>
+<h3>Ref#12</h3>
+One and only site object shall be present for each project....Ok
+<br><font color="red">The site name shall contain the official ID of the Cadastral number</font>
+<h3>Ref#14</h3>
+<h4>The storey names shall be an integer numbers starting from 1 at the lowest floor level and incrementing by one for each floor level</h4>
+<font color="red">Floor1..current used name:<b>'0'</b> has to be changed to be:<b>1</b><br></font>
+<font color="red">Floor2..current used name:<b>'1'</b> has to be changed to be:<b>2</b><br></font>
+<font color="red">Floor3..current used name:<b>'2'</b> has to be changed to be:<b>3</b><br></font>
+<script type="text/javascript">
+     SyntaxHighlighter.all()
+</script>
+</body></html>

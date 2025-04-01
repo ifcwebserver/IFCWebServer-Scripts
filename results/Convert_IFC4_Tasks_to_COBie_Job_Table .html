@@ -1,0 +1,496 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>IFCWebServer.Script console</title>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/common.js"></script>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/css.js"></script>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/standardista-table-sorting.js"></script>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/shCore.js"></script>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/shBrushRuby.js"></script>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/shBrushXml.js"></script>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/jquery-1.js"></script>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/auto.js"></script>
+<script type="text/javascript" src="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/style.css">
+<link href="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/shCore.css" rel="stylesheet" type="text/css">
+<link href="COBie_MVDXML%20Mapping%20IfcTasks%20%20to%20Job%20Table%20-Dateien/shThemeDefault.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<style type="text/css" style="display:none">ul.auto-list{display:none;position:absolute;top:0px;left:0px;border:1px solid green;background-color:#A3DF99;padding:0;margin:0;list-style:none;}ul.auto-list>li:hover,ul.auto-list>li[data-selected=true]{background-color:#236574;}ul.auto-list>li{border:1px solid gray;cursor:default;padding:2px;}mark{font-weight:bold;}
+</style>
+<div id="top-menu">
+<a href="http://127.0.0.1/index.rb">Home</a>|
+<a href="http://127.0.0.1/gobim.rb?q=BIMs_List">Browse BIMs</a>|
+<a href="http://127.0.0.1/settings.rb">Settings</a>|
+<a href="http://127.0.0.1/extensions_gallery.rb">Extensions</a>|
+<a href="http://127.0.0.1/onfly_doc.rb">IFCDocs</a>|
+</div>
+<script type="text/javascript">
+function dispHandle(obj) 
+{
+if (obj.style.display == "none")
+obj.style.display = "";
+else
+obj.style.display = "none";
+}
+</script>
+<form action="" method="POST">
+default schema:
+<select name="schema" id="schema">
+<option value="IFC2X_FINAL">IFC2X_FINAL</option>
+<option value="IFC2X2_FINAL">IFC2X2_FINAL</option>
+<option value="IFC2X3_Final">IFC2X3_Final</option>
+<option value="IFC2X3G_ALPHA">IFC2X3G_ALPHA</option>
+<option value="IFC2X3GE">IFC2X3GE</option>
+<option value="IFC2X3_TC1" selected="selected">IFC2X3_TC1</option>
+<option value="IFC2X4_ALPHA">IFC2X4_ALPHA</option>
+<option value="IFC2X4_BETA1">IFC2X4_BETA1</option>
+<option value="IFC2X4_BETA2">IFC2X4_BETA2</option>
+<option value="IFC2X4_BETA3">IFC2X4_BETA3</option>
+<option value="IFC2X4_RC1">IFC2X4_RC1</option>
+<option value="IFC2X4_RC2">IFC2X4_RC2</option>
+<option value="IFC2X4_RC3">IFC2X4_RC3</option>
+<option value="IFC2X4_COBIE2012">IFC2X4_COBIE2012</option>
+</select>
+<div id="res_words">
+<textarea cols="160" rows="10" name="q" id="q" style="background-color: black; color: rgb(0, 255, 0);">#
+ Mapping the concepts related to the class IfcTask in IFC4 
+specifications  into "Job" table in COBie V2.4
+# according to the Facility Management Handover Model View Definition by
+ Bill East and Tim Chipman
+# http://www.buildingsmartalliance.org/docs/BSADOC_COBIE/index.htm
+# (licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported
+ License)
+# http://creativecommons.org/licenses/by-nd/3.0/
+ 
+ 
+# Ver1: 23.06.2012
+ 
+use "COBie-UK-2012-example1.ifc"
+jobs={}
+HTML.h2 "Jobs"
+HTML.tableHeader 
+"Name","CreatedBy","CreatedOn","Category","Status","TypeName","Description","Duration","Start","ExtIdentifier","TaskNumber","Priors","ResourceNames","Frequency","FrequencyUnit"
+IFCTASK.where("all","o").each
+ { |o|
+ 
+#1: Job.Name=IfcTask.Name
+jobs['Name'] = o.name.gsub("'","")
+ 
+#2: 
+Job.CreatedBy=IfcTask.OwnerHistory.OwningUser.ThePerson.Identification
+jobs['CreatedBy'] = 
+o.ownerHistory.to_obj.owningUser.to_obj.thePerson.to_obj.id.gsub("'","")
+ 
+#3: Job.CreatedOn=IfcTask.OwnerHistory.CreationDate
+jobs['CreatedOn']=  Time.at(o.ownerHistory.to_obj.creationDate.to_i)
+ 
+#4: 
+Job.Category=IfcTask.HasAssociations[*]\IfcRelAssociatesClassification.RelatingClassification\IfcClassificationReference.Identification
+jobs['Category']=""
+IFCRELASSOCIATESCLASSIFICATION.where("all","o").each
+ { |relAssObj|
+if 
+relAssObj.relatedObjects.to_s.sub("(","").sub(")","").split('#').include?(o.line_id.to_s)
+
+    relatingClassification= relAssObj.relatingClassification.to_obj
+    jobs['Category'] = relatingClassification.itemReference.gsub("'","")
+ if relatingClassification.class == IFCCLASSIFICATIONREFERENCE
+end}
+ 
+#5: Job.Status=IfcTask.Status
+jobs['Status'] = o.status.gsub("'","")
+ 
+#6: 
+Job.TypeName=IfcTask.HasAssignments[*]\IfcRelAssignsToProduct.RelatingProduct
+jobs['TypeName']
+ =""
+IFCRELASSIGNSTOPRODUCT.where("all","o").each { |relAssObj|
+if 
+relAssObj.relatedObjects.to_s.sub("(","").sub(")","").split('#').include?(o.line_id.to_s)
+
+    relProduct =relAssObj.relatingProduct.to_obj
+    jobs['TypeName'] =relatingClassification=relProduct.class.to_s + ":"
+ + relProduct.name + "(" + relProduct.globalId + ")"
+end}
+ 
+#7: Job.Description=IfcTask.Description
+jobs['Description'] = o.description.gsub("'","")
+ 
+#8: Job.Duration=IfcTask.TaskTime\ 
+=IfcTaskTimeRecurring.ScheduleDuration
+jobs['Duration'] = ""
+jobs['Duration'] = o.taskTime.to_obj.scheduleDuration if 
+o.respond_to?('taskTime')
+ 
+#9: Job.Start=IfcTask.TaskTime\ =IfcTaskTimeRecurring.ScheduleStart
+jobs['Start'] =""
+jobs['Start'] = o.taskTime.to_obj.scheduleStart if 
+o.respond_to?('taskTime')
+ 
+#10: 
+Job.ExtSystem=IfcTask.OwnerHistory.OwningApplication.ApplicationIdentifier
+#11:
+ Job.ExtObject=IfcTask\
+ 
+#12: Job.ExtIdentifier=IfcTask.GlobalId
+jobs['ExtIdentifier'] = o.globalId.gsub("'","")
+ 
+#13: Job.TaskNumber=IfcTask.Identification
+jobs['TaskNumber'] = o.taskId.gsub("'","")
+ 
+#14: Job.Priors=IfcTask.IsSuccessorTo[*].RelatedObject
+jobs['Priors'] =""
+IFCRELSEQUENCE.where("all","o").each { |relProc|
+if 
+relProc.relatedProcess.to_s.sub("(","").sub(")","").split('#').include?(o.line_id.to_s)
+
+    relatingProcess = relProc.relatingProcess.to_obj
+    jobs['Priors'] *= relatingProcess.class.to_s + ":" + 
+relatingProcess.name + "(" + relatingProcess.globalId + ")&lt;br&gt;"
+end
+}
+ 
+#15: 
+Job.ResourceNames=IfcTask.OperatesOn[*]\IfcRelAssignsToProcess.RelatedObjects[*]
+jobs['ResourceNames']=
+ ""
+IFCRELASSIGNSTOPROCESS.where("all","o").each { |relAssObj|
+if 
+relAssObj.relatingProcess.to_s.sub("(","").sub(")","").split('#').include?(o.line_id.to_s)
+
+    relAssObj.relatedObjects.toIfcObject.each { |k1,v1|
+    jobs['ResourceNames'] += v1.class.to_s + ":" + v1.name + "(" + 
+v1.globalId + ")"
+    }
+end
+}
+ 
+#16: Job.Frequency=IfcTask.TaskTime\ 
+=IfcTaskTimeRecurring.Recurrence\IfcRecurrencePattern.Interval
+#17: Job.FrequencyUnit=IfcTask.TaskTime\ 
+=IfcTaskTimeRecurring.Recurrence\IfcRecurrencePattern.RecurrenceType
+jobs['Frequency']= ""
+jobs['FrequencyUnit']= ""
+if o.respond_to?('taskTime') and  o.taskTime.to_obj.class == 
+IFCTASKTIMERECURRING
+  jobs['Frequency']= o.taskTime.to_obj.recurrence.to_obj.interval
+  
+jobs['FrequencyUnit']=o.taskTime.to_obj.recurrence.to_obj.recurrenceType
+end
+ 
+puts HTML.arr_to_row jobs.values
+}
+puts "&lt;/table&gt;"
+</textarea></div>
+<p>Password:<input name="password" size="6" maxlength="8" type="password">
+<input value="Run" type="submit"></p>
+</form>
+<h2>Jobs</h2>
+<table id="sortableTable0" class="sortable">
+<thead><tr>
+<th><a title="Click to sort" columnid="0" href="#">Name</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="1" href="#">CreatedBy</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="2" href="#">CreatedOn</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="3" href="#">Category</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="4" href="#">Status</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="5" href="#">TypeName</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="6" href="#">Description</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="7" href="#">Duration</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="8" href="#">Start</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="9" href="#">ExtIdentifier</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="10" href="#">TaskNumber</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="11" href="#">Priors</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="12" href="#">ResourceNames</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="13" href="#">Frequency</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+<th><a title="Click to sort" columnid="14" href="#">FrequencyUnit</a><span class="tableSortArrow">&nbsp;&nbsp;</span></th>
+</tr></thead>
+<tbody>
+
+<tr>
+<td> Wallgate ALS180 Basin 470w x 300d Maintenance Schedule</td>
+<td>nn@aec3.com</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> General wear mainly affects the components in contact with water. 
+If the unit is installed in a hard water area. lime scale removers must 
+be used on the basin and water nozzle components. The water nozzle can 
+be dismantled using a special key and the inserts can either be replaced
+ or immersed in a lime scale remover solution for cleaning.</td>
+<td></td>
+<td></td>
+<td>0tskJoID0E6JHK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> WC Pan 510 x 510mm Maintenance Schedule</td>
+<td>nn@aec3.com</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> Surface Maintenance: 1. Routine hygienic cleaning should consist of
+ spraying the CWC with a bathroom type cleaner [which may have 
+anti-bacterial or anti-lime scale properties] and wiping or washing down
+ with a soft cloth. Bleach based toilet cleaners may also be used. 2. 
+Lime scale can be removed using proprietary products and abrasives. 3 
+Stains + surface marks may be removed with the use of a 3M Scotch-Brite 
+pad [grade â&#8364;&#339;Greenâ&#8364;&#157; fin] used wet with a liquid cleaning agent if 
+necessary.</td>
+<td></td>
+<td></td>
+<td>0tskJoID0EDIHK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> Plumbing SVP 1 Maintenance Schedule</td>
+<td>nn@aec3.com</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> Plumbing SVP 1</td>
+<td></td>
+<td></td>
+<td>0tskJoID0EKGHK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> Mirror Maintenance Schedule</td>
+<td>nn@aec3.com</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> Mirror</td>
+<td></td>
+<td></td>
+<td>0tskJoID0EREHK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> TFT Monitor Maintenance Schedule</td>
+<td>nn@aec3.com</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> TFT Monitor</td>
+<td></td>
+<td></td>
+<td>0tskJoID0EYCHK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> 1275x1200h Maintenance Schedule</td>
+<td>jjohnston@brydenwood.co.uk</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> 1275x1200h</td>
+<td></td>
+<td></td>
+<td>0tskJoID0E46GK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> Safer Seat Maintenance Schedule</td>
+<td>jjohnston@brydenwood.co.uk</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> Safer Seat</td>
+<td></td>
+<td></td>
+<td>0tskJoID0EC4GK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> Cell Locker Maintenance Schedule</td>
+<td>jjohnston@brydenwood.co.uk</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> Cell Locker</td>
+<td></td>
+<td></td>
+<td>0tskJoID0EH1GK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> Desk Whitewood Maintenance Schedule</td>
+<td>jjohnston@brydenwood.co.uk</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> Desk Whitewood</td>
+<td></td>
+<td></td>
+<td>0tskJoID0EMXGK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> Cell Bed family Maintenance Schedule</td>
+<td>jjohnston@brydenwood.co.uk</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> Cell Bed family</td>
+<td></td>
+<td></td>
+<td>0tskJoID0ERUGK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> 790 x 2110mm 3 Maintenance Schedule</td>
+<td>jjohnston@brydenwood.co.uk</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> 790 x 2110mm 3</td>
+<td></td>
+<td></td>
+<td>0tskJoID0EWRGK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+
+<tr>
+<td> 1810 x 2110mm Maintenance Schedule</td>
+<td>jjohnston@brydenwood.co.uk</td>
+<td>2012-02-17 09:59:02 +0100</td>
+<td></td>
+<td> Not Yet Started</td>
+<td></td>
+<td> 1810 x 2110mm</td>
+<td></td>
+<td></td>
+<td>0tskJoID0E2OGK00000000</td>
+<td> n/a</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+</tbody></table>
+<script type="text/javascript">
+     SyntaxHighlighter.all()
+</script>
+<script type="text/javascript">
+var countries = [];
+function initAutoComplete(){
+	$.ajax("autocomplete.rb",{
+		success: function(data, textStatus, jqXHR){
+		countries = data.split("|");
+			$("#res_words textarea").autocomplete({
+				wordCount:1,
+				on: {
+					query: function(text,cb){
+						var words = [];
+						for( var i=0; i<countries.length; i++ ){
+							if( countries[i].toLowerCase().indexOf(text.toLowerCase()) == 0 ) words.push(countries[i]);
+							if( words.length > 5 ) break;
+						}
+						cb(words);							
+					}
+				}
+			});			
+		}
+	});
+}
+$(document).ready(function() {
+initAutoComplete();
+var myFormOptions = {
+  target:        '#form_result',
+  beforeSubmit:  formBeforeSubmit,
+  success:       formAfterSubmit
+};
+
+function formBeforeSubmit() {
+  // PERFORM ACTIONS BEFORE FORM SUBMIT HERE
+  return true;
+}
+ 
+function formAfterSubmit()  {
+  // PERFORM ACTIONS AFTER FORM SUBMIT HERE
+  $('#div_edit_form').hide();
+  $('#form_result')="Saved successfully"
+ } 
+// Make form use jQuery Form Plugin
+$('#edit_form').ajaxForm(myFormOptions);
+});
+</script>
+<div style="position: absolute; top: 57.3833px; left: 8px; border-collapse: separate; border-style: inset; border-width: 1.11667px; border-spacing: 0px; direction: ltr; font-size-adjust: none; font-size: 13px; font-stretch: normal; font-style: normal; font-family: monospace; font-variant: normal; font-weight: 400; width: 1271.77px; height: 186.767px; letter-spacing: normal; margin: 1px 0px; padding: 0px; overflow: hidden; line-height: 16.75px; z-index: -10;"><span id="test-width_auto_1" style="line-block">&nbsp;</span></div><ul class="auto-list"></ul></body></html>

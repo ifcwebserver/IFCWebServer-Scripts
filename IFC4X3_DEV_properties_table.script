@@ -1,0 +1,39 @@
+#script ID: Meta_64213212332156859
+$default_schema="IFC2X2_Final"
+$default_schema="IFC4X3_DEV_0078979"
+
+#$default_schema="IFC4"
+load_schema_and_extensions
+
+HTML.tableHeader "IfcClass","SuperIfcClass","NumberOfParameters","P1","P2","P3","P4","P5","P6","P7","P8","P9","P10","P11","P12","P13","P14","P15","P16","P17","P18","P19","P20","P21","P22","P23","P24","P25","P26","P27","P28","P29","P30","P31","P32","P33","P34","P35","P36","P37","P38","P39","P40","P41","P42","P43","P44","P45"
+
+uniq_parameter_names={}
+
+
+IFC.subclasses.each { |c|
+next if c::ABSTRACT
+numOfParameters= ( c.nonInverseAttributes + c.inverseAttributes + c.derivAttributes ).split("|").size
+parameters_array=[]
+45.times {
+    parameters_array << ""
+}
+(c.nonInverseAttributes + c.inverseAttributes +  c.derivAttributes ).split("|").each_with_index { |att,index|
+next if att == nil or att == ""
+parameters_array[index]= att
+
+if not uniq_parameter_names.include? att
+uniq_parameter_names[att] = 1
+else
+uniq_parameter_names[att] += 1
+end
+}
+HTML.arr_to_row  [$ifcClassesNames[c.to_s]] +[$ifcClassesNames[c.superclass.to_s]]  +   [numOfParameters] + parameters_array
+}
+puts "</table>"
+puts "Number of uniq paramters is " + uniq_parameter_names.keys.size.to_s
+puts "<br>"
+HTML.tableHeader "Parameter","Repeated?"
+uniq_parameter_names.each { |k,v|
+HTML.arr_to_row [k,v]
+}
+puts "</table>"

@@ -1,0 +1,9 @@
+#create a space classification report
+use "DC_Riverside_Bldg-ARCH-LOD_200.ifc"
+load_ifc_classes "|IfcSpace|IfcClassificationReference|IfcRelAssociatesClassification|",false
+reportFields = "Name:name|GUID:globalId"
+reportFields += "|Cls.Location:			@ext_ClassificationReference_Location"
+reportFields += "|Cls.Identification:	@ext_ClassificationReference_ItemReference"
+reportFields += "|Cls.Name:				@ext_ClassificationReference_Name"
+reportFields += "|Cls.ReferencedSource:	@ext_ClassificationReference_ReferencedSource"
+IFCSPACE.list(reportFields)

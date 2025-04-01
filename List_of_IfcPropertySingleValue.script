@@ -1,0 +1,16 @@
+use "Clinic_S_20110715_optimized.ifc"
+property_names=[];property_values={}
+IFCPROPERTYSINGLEVALUE.where("all","o").each { |o|
+proName = o.name
+property_names << proName  if not property_names.include?(proName)
+property_values[proName] = [] if property_values[proName] == nil
+property_values[proName] << o.fix_it(o.nominalValue) if not property_values[proName].include?(o.fix_it(o.nominalValue))}
+puts "This BIM model has " + property_names.size.to_s + " different single value properties<hr>"
+puts "<table class='sortable'><thead><tr><th>ID</th><th>Property Name</th><th>Property Values</th><th>Values count</th></tr></thead><tbody>"
+i=1
+property_names.sort.each { |p|
+puts "<tr><td>" + i.to_s + "</td><td>" + p.gsub("'","") + "</td><td>"
+HTML.select_box(p.gsub("'",""),property_values[p].sort,"...",false)
+puts "</td><td>" + property_values[p].size.to_s + "</td></tr>"
+i +=1}
+puts "</tbody></table>"

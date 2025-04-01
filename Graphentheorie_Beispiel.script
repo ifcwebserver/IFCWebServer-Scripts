@@ -1,0 +1,17 @@
+#Convert IfcRelConnectsPathElements to Graphic Network
+use "Allplan-2008-Institute-Var-2-IFC.ifc"
+knoten =[]
+kanten=[]
+done={}
+IFCRELCONNECTSPATHELEMENTS.where("all","o").each { |o|
+knoten << o.relatedElement.to_obj.globalId  if done[o.relatedElement.to_obj.globalId] == nil
+knoten << o.relatingElement.to_obj.globalId if done[o.relatingElement.to_obj.globalId] == nil
+kanten << o.relatedElement.to_obj.globalId + "," + o.relatingElement.to_obj.globalId
+done[o.relatedElement.to_obj.globalId]=true
+done[o.relatingElement.to_obj.globalId]=true
+}
+
+puts "nodedef> name VARCHAR</br>"
+puts knoten.join("</br>")
+puts "</br>edgedef> node1,node2</br>"
+puts kanten.join("</br>")

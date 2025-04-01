@@ -1,0 +1,7 @@
+$report_cols="as_link|globalId|name|phase|description|longName"
+HTML.tableHeader  "id","Link","globalId","name","phase","description","longName"
+Server.ModelsList.each_with_index { |model,i|
+use model 
+puts IFCPROJECT.where("all","o.to_html").join.gsub("'","")
+}
+puts "</table>"

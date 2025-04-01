@@ -1,0 +1,19 @@
+#Convert IFCRELASSOCIATESMATERIAL to Graphic Network(123321)
+use "FZK-Haus-AC11-IFC.ifc"
+knoten =[]
+kanten=[]
+done={}
+IFCRELASSOCIATESMATERIAL.where("all","o").each { |o|
+knoten << o.relatedObjects + "," + o.relatedObjects.to_obj.class.to_s + "(" + o.relatedObjects.to_obj.globalId + ")"  if done[o.relatedObjects] == nil
+mat_name = o.relatingMaterial.to_obj.class.to_s + "(" + o.relatingMaterial.to_obj.line_id.to_s + ")"
+mat_name = o.relatingMaterial.to_obj.name if o.relatingMaterial.to_obj.respond_to?('name') and o.relatingMaterial.to_obj.name != nil
+knoten << o.relatingMaterial + "," + mat_name if done[o.relatingMaterial] == nil
+kanten << o.relatedObjects + "," + o.relatingMaterial
+done[o.relatedObjects]=true
+done[o.relatingMaterial]=true
+}
+ 
+puts "nodedef> name VARCHAR,label VARCHAR</br>"
+puts knoten.join("</br>")
+puts "</br>edgedef> node1,node2</br>"
+puts kanten.join("</br>")

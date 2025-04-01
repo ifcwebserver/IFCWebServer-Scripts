@@ -1,0 +1,21 @@
+#This script select the elements which are assigned to a certain material
+#paramaeters: BIM model , Material name
+
+$bim_model= "Tekla.ifc"
+$material_name="Masonry Block"
+
+use $bim_model
+$resultFile= File.new("temp/all/" + $bim_model.sub(".ifc","") + "_" + $material_name + ".ifc",  "w")
+IFCRELASSOCIATESMATERIAL.where("all","o").each { |o|
+if  o.relatingMaterial.to_obj.class == IFCMATERIAL and o.relatingMaterial.to_obj.name.include?($material_name)
+  IFC.ids_loop o.relatedObjects
+elsif o.relatingMaterial.to_obj.class == IFCMATERIALLAYERSETUSAGE 
+  if o.relatingMaterial.to_obj.forLayerSet.to_obj.materialLayers.to_obj.material.to_obj.name.include?($material_name)	
+     IFC.ids_loop o.relatedObjects
+  end
+end
+}
+$resultFile.close	
+Server.runConverter("temp/runconverter.txt")
+puts "<a href='sgl/?url=../temp/all/" + $bim_model.sub(".ifc","") + "_" + $material_name  + "'>" +
+"<img src='temp/all/" + $bim_model.sub(".ifc","") + "_" + $material_name  + ".png'/></a>"

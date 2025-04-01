@@ -1,0 +1,210 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>IFCWebServer.Script console</title>
+<script type="text/javascript" async="" src="./PsetTemplates_files/ga.js"></script><script type="text/javascript" src="./PsetTemplates_files/common.js"></script>
+<script type="text/javascript" src="./PsetTemplates_files/css.js"></script>
+<script type="text/javascript" src="./PsetTemplates_files/standardista-table-sorting.js"></script>
+<script type="text/javascript" src="./PsetTemplates_files/shCore.js"></script>
+<script type="text/javascript" src="./PsetTemplates_files/shBrushRuby.js"></script>
+<script type="text/javascript" src="./PsetTemplates_files/shBrushXml.js"></script>
+<script type="text/javascript" src="./PsetTemplates_files/jquery-1.5.js"></script>
+<script type="text/javascript" src="./PsetTemplates_files/auto.js"></script>
+<script type="text/javascript" src="./PsetTemplates_files/jquery.form.js"></script>
+<link rel="stylesheet" type="text/css" href="./PsetTemplates_files/style.css">
+<link href="./PsetTemplates_files/shCore.css" rel="stylesheet" type="text/css">
+<link href="./PsetTemplates_files/shThemeDefault.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<style type="text/css" style="display:none">ul.auto-list{display:none;position:absolute;top:0px;left:0px;border:1px solid green;background-color:#A3DF99;padding:0;margin:0;list-style:none;}ul.auto-list>li:hover,ul.auto-list>li[data-selected=true]{background-color:#236574;}ul.auto-list>li{border:1px solid gray;cursor:default;padding:2px;}mark{font-weight:bold;}
+</style>
+<h2>PropertySetTemplates for: IfcSpace</h2>
+<div class="documentaion">
+<h3>Pset_EnvironmentalImpactIndicators</h3>
+Environmental impact indicators are related to a given \X2\201C\X0\functional unit\X2\201D\X0\ (ISO 14040 concept). An example of functional unit is a "Double glazing window with PVC frame" and the unit to consider is "one square meter of opening elements filled by this product\X2\201D\X0\.\X\0AIndicators values are valid for the whole life cycle or only a specific phase (see LifeCyclePhase property). Values of all the indicators are expressed per year according to the expected service life. The first five properties capture the characteristics of the functional unit. The following properties are related to environmental indicators.\X\0AThere is a consensus agreement international for the five one. Last ones are not yet fully and formally agreed at the international level.
+<br><br><b>ApplicableEntities:</b>IfcElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AtmosphericAcidificationPerUnit</td><td>IfcMassMeasure</td></tr><tr><td>ClimateChangePerUnit</td><td>IfcMassMeasure</td></tr><tr><td>EutrophicationPerUnit</td><td>IfcMassMeasure</td></tr><tr><td>ExpectedServiceLife</td><td>IfcTimeMeasure</td></tr><tr><td>FunctionalUnitReference</td><td>IfcLabel</td></tr><tr><td>HazardousWastePerUnit</td><td>IfcMassMeasure</td></tr><tr><td>InertWastePerUnit</td><td>IfcMassMeasure</td></tr><tr><td>LifeCyclePhase</td><td>IfcLabel</td></tr><tr><td>NonHazardousWastePerUnit</td><td>IfcMassMeasure</td></tr><tr><td>NonRenewableEnergyConsumptionPerUnit</td><td>IfcEnergyMeasure</td></tr><tr><td>PhotochemicalOzoneFormationPerUnit</td><td>IfcMassMeasure</td></tr><tr><td>RadioactiveWastePerUnit</td><td>IfcMassMeasure</td></tr><tr><td>Reference</td><td>IfcIdentifier</td></tr><tr><td>RenewableEnergyConsumptionPerUnit</td><td>IfcEnergyMeasure</td></tr><tr><td>ResourceDepletionPerUnit</td><td>IfcMassMeasure</td></tr><tr><td>StratosphericOzoneLayerDestructionPerUnit</td><td>IfcMassMeasure</td></tr><tr><td>TotalPrimaryEnergyConsumptionPerUnit</td><td>IfcEnergyMeasure</td></tr><tr><td>Unit</td><td>IfcText</td></tr><tr><td>WaterConsumptionPerUnit</td><td>IfcVolumeMeasure</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_EnvironmentalImpactValues</h3>
+The following properties capture environmental impact values of an element. They correspond to the indicators defined into Pset_EnvironmentalImpactIndicators. \X\0AEnvironmental impact values are obtained multiplying indicator value per unit by the relevant quantity of the element.
+<br><br><b>ApplicableEntities:</b>IfcElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AtmosphericAcidification</td><td>IfcMassMeasure</td></tr><tr><td>ClimateChange</td><td>IfcMassMeasure</td></tr><tr><td>Eutrophication</td><td>IfcMassMeasure</td></tr><tr><td>HazardousWaste</td><td>IfcMassMeasure</td></tr><tr><td>InertWaste</td><td>IfcMassMeasure</td></tr><tr><td>NonHazardousWaste</td><td>IfcMassMeasure</td></tr><tr><td>NonRenewableEnergyConsumption</td><td>IfcEnergyMeasure</td></tr><tr><td>PhotochemicalOzoneFormation</td><td>IfcMassMeasure</td></tr><tr><td>RadioactiveWaste</td><td>IfcMassMeasure</td></tr><tr><td>RenewableEnergyConsumption</td><td>IfcEnergyMeasure</td></tr><tr><td>ResourceDepletion</td><td>IfcMassMeasure</td></tr><tr><td>StratosphericOzoneLayerDestruction</td><td>IfcMassMeasure</td></tr><tr><td>TotalPrimaryEnergyConsumption</td><td>IfcEnergyMeasure</td></tr><tr><td>WaterConsumption</td><td>IfcVolumeMeasure</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceCommon</h3>
+Properties common to the definition of all occurrences of IfcSpace. Please note that several space attributes are handled directly at the IfcSpace instance, the space number (or short name) by IfcSpace.Name, the space name (or long name) by IfcSpace:LongName, and the description (or comments) by IfcSpace.Description. Actual space quantities, like space perimeter, space area and space volume are provided by IfcElementQuantity, and space classification according to national building code by IfcClassificationReference. The level above zero (relative to the building) for the slab row construction is provided by the IfcBuildingStorey.Elevation, the level above zero (relative to the building) for the floor finish is provided by the IfcSpace.ElevationWithFlooring.
+<br><br><b>ApplicableEntities:</b>IfcSpace
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>GrossPlannedArea</td><td>IfcAreaMeasure</td></tr><tr><td>HandicapAccessible</td><td> e.g.</td></tr><tr><td>IsExternal</td><td>.P_SINGLEVALUE.</td></tr><tr><td>NetPlannedArea</td><td>IfcAreaMeasure</td></tr><tr><td>PubliclyAccessible</td><td> e.g.</td></tr><tr><td>Reference</td><td>.P_SINGLEVALUE.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceCoveringRequirements</h3>
+Properties common to the definition of covering requirements of IfcSpace. Those properties define the requirements coming from a space program in early project phases and can later be used to define the room book information, if such coverings are not modeled explicitly as covering elements.
+<br><br><b>ApplicableEntities:</b>IfcSpace
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>CeilingCovering</td><td>.P_SINGLEVALUE.</td></tr><tr><td>CeilingCoveringThickness</td><td> the geometric parameters take precedence.</td></tr><tr><td>ConcealedCeiling</td><td>.P_SINGLEVALUE.</td></tr><tr><td>ConcealedFlooring</td><td>.P_SINGLEVALUE.</td></tr><tr><td>FloorCovering</td><td>.P_SINGLEVALUE.</td></tr><tr><td>FloorCoveringThickness</td><td> the geometric parameters take precedence.</td></tr><tr><td>Molding</td><td>.P_SINGLEVALUE.</td></tr><tr><td>MoldingHeight</td><td>.P_SINGLEVALUE.</td></tr><tr><td>SkirtingBoard</td><td>.P_SINGLEVALUE.</td></tr><tr><td>SkirtingBoardHeight</td><td>.P_SINGLEVALUE.</td></tr><tr><td>WallCovering</td><td>.P_SINGLEVALUE.</td></tr><tr><td>WallCoveringThickness</td><td> the geometric parameters take precedence.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceFireSafetyRequirements</h3>
+Properties related to fire protection of spaces that apply to the occurrences of IfcSpace or IfcZone.
+<br><br><b>ApplicableEntities:</b>IfcSpace, IfcSpatialZone, IfcZone
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AirPressurization</td><td>.P_SINGLEVALUE.</td></tr><tr><td>FireExit</td><td> e.g.</td></tr><tr><td>FireRiskFactor</td><td>IfcLabel</td></tr><tr><td>FlammableStorage</td><td> (FALSE)</td></tr><tr><td>SprinklerProtection</td><td>.P_SINGLEVALUE.</td></tr><tr><td>SprinklerProtectionAutomatic</td><td> if the property "SprinklerProtection" is set to TRUE.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceLightingRequirements</h3>
+Properties related to the lighting requirements that apply to the occurrences of IfcSpace or IfcZone. This includes the required artificial lighting, illuminance, etc.
+<br><br><b>ApplicableEntities:</b>IfcSpace, IfcSpatialZone, IfcZone
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>ArtificialLighting</td><td>.P_SINGLEVALUE.</td></tr><tr><td>Illuminance</td><td>IfcIlluminanceMeasure</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceOccupancyRequirements</h3>
+Properties concerning work activities occurring or expected to occur within one or a set of similar spatial structure elements.
+<br><br><b>ApplicableEntities:</b>IfcSpace, IfcSpatialZone, IfcZone
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AreaPerOccupant</td><td>IfcAreaMeasure</td></tr><tr><td>IsOutlookDesirable</td><td>.P_SINGLEVALUE.</td></tr><tr><td>MinimumHeadroom</td><td>IfcLengthMeasure</td></tr><tr><td>OccupancyNumber</td><td>IfcCountMeasure</td></tr><tr><td>OccupancyNumberPeak</td><td>IfcCountMeasure</td></tr><tr><td>OccupancyTimePerDay</td><td>IfcTimeMeasure</td></tr><tr><td>OccupancyType</td><td>IfcLabel</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceParking</h3>
+Properties common to the definition of all occurrences of IfcSpace which have an attribute value for ObjectType = ''Parking''. <br><br><b>Note</b>: Modified in IFC 2x3, properties ParkingUse and ParkingUnits added.
+<br><br><b>ApplicableEntities:</b>IfcSpace/PARKING
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>IsAisle</td><td></td></tr><tr><td>IsOneWay</td><td>.P_SINGLEVALUE.</td></tr><tr><td>ParkingUnits</td><td> where the parking space is for motorcycles or bicycles</td></tr><tr><td>ParkingUse</td><td> motorcycle</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceThermalRequirements</h3>
+Properties related to the comfort requirements for thermal and other  thermal related performance properties of spaces that apply to the occurrences of IfcSpace, IfcSpatialZone or IfcZone. It can also be used to capture requirements for IfcSpaceType''s. This includes the required design temperature, humidity, ventilation, and air conditioning.
+<br><br><b>ApplicableEntities:</b>IfcSpace, IfcSpatialZone, IfcZone
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AirConditioning</td><td>.P_SINGLEVALUE.</td></tr><tr><td>AirConditioningCentral</td><td> if the property "AirConditioning" is set to TRUE.</td></tr><tr><td>DiscontinuedHeating</td><td> (FALSE)</td></tr><tr><td>MechanicalVentilationRate</td><td>.P_SINGLEVALUE.</td></tr><tr><td>NaturalVentilation</td><td>.P_SINGLEVALUE.</td></tr><tr><td>NaturalVentilationRate</td><td>.P_SINGLEVALUE.</td></tr><tr><td>SpaceHumidity</td><td> otherwise for the intermediate period. Provide this property</td></tr><tr><td>SpaceHumidityMax</td><td> otherwise for the intermediate period.</td></tr><tr><td>SpaceHumidityMin</td><td> otherwise for the intermediate period.</td></tr><tr><td>SpaceHumiditySummer</td><td> that is required from user/designer view point and provided as requirement for cooling.</td></tr><tr><td>SpaceHumidityWinter</td><td>.P_SINGLEVALUE.</td></tr><tr><td>SpaceTemperature</td><td> it applies all year</td></tr><tr><td>SpaceTemperatureMax</td><td> it applies all year</td></tr><tr><td>SpaceTemperatureMin</td><td> it applies all year</td></tr><tr><td>SpaceTemperatureSummerMax</td><td> that is required from user/designer view point and provided as requirement for cooling.</td></tr><tr><td>SpaceTemperatureSummerMin</td><td> that is required from user/designer view point and provided as requirement for cooling.</td></tr><tr><td>SpaceTemperatureWinterMax</td><td> that is required from user/designer view point and provided as requirement for heating.</td></tr><tr><td>SpaceTemperatureWinterMin</td><td> that is required from user/designer view point and provided as requirement for heating.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceThermalPHistory</h3>
+Thermal and air flow conditions of a space or zone. HISTORY: New property set in IFC 2x2.
+<br><br><b>ApplicableEntities:</b>IfcSpace
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>CoolingAirFlowRate</td><td>IfcTimeSeries</td></tr><tr><td>ExhaustAirFlowRate</td><td>IfcTimeSeries</td></tr><tr><td>HeatingAirFlowRate</td><td>IfcTimeSeries</td></tr><tr><td>SpaceRelativeHumidity</td><td>IfcTimeSeries</td></tr><tr><td>SpaceTemperature</td><td>IfcTimeSeries</td></tr><tr><td>VentilationAirFlowRate</td><td>IfcTimeSeries</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceThermalLoadPHistory</h3>
+The space thermal load IfcSpaceThermalLoadProperties defines actual measured thermal losses and gains occurring within a space or zone. The thermal load source attribute defines an enumeration of possible sources of the thermal load.
+<br><br><b>ApplicableEntities:</b>IfcSpace
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AirExchangeRate</td><td>IfcTimeSeries</td></tr><tr><td>DryBulbTemperature</td><td>IfcTimeSeries</td></tr><tr><td>EquipmentSensible</td><td>IfcTimeSeries</td></tr><tr><td>ExhaustAir</td><td>IfcTimeSeries</td></tr><tr><td>InfiltrationSensible</td><td>IfcTimeSeries</td></tr><tr><td>Lighting</td><td>IfcTimeSeries</td></tr><tr><td>People</td><td>IfcTimeSeries</td></tr><tr><td>RecirculatedAir</td><td>IfcTimeSeries</td></tr><tr><td>RelativeHumidity</td><td>IfcTimeSeries</td></tr><tr><td>TotalLatentLoad</td><td> then the thermal load is a gain to the space.</td></tr><tr><td>TotalRadiantLoad</td><td> then the thermal load is a gain to the space.</td></tr><tr><td>TotalSensibleLoad</td><td> then the thermal load is a gain to the space.</td></tr><tr><td>VentilationIndoorAir</td><td>IfcTimeSeries</td></tr><tr><td>VentilationOutdoorAir</td><td>IfcTimeSeries</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceHeaterPHistory</h3>
+Space heater performance history common attributes.
+<br><br><b>ApplicableEntities:</b>IfcSpaceHeater
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AirResistanceCurve</td><td></td></tr><tr><td>AuxiliaryEnergySourceConsumption</td><td>IfcTimeSeries</td></tr><tr><td>Effectiveness</td><td>IfcTimeSeries</td></tr><tr><td>Exponent</td><td>.</td></tr><tr><td>FractionConvectiveHeatTransfer</td><td>IfcTimeSeries</td></tr><tr><td>FractionRadiantHeatTransfer</td><td>IfcTimeSeries</td></tr><tr><td>HeatOutputRate</td><td>IfcTimeSeries</td></tr><tr><td>OutputCapacityCurve</td><td></td></tr><tr><td>SpaceAirTemperature</td><td>IfcTimeSeries</td></tr><tr><td>SpaceMeanRadiantTemperature</td><td>IfcTimeSeries</td></tr><tr><td>SurfaceTemperature</td><td>IfcTimeSeries</td></tr><tr><td>UACurve</td><td>.P_REFERENCEVALUE.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_ManufacturerTypeInformation</h3>
+Defines characteristics of types (ranges) of manufactured products that may be given by the manufacturer. <b>Note</b> that the term ''manufactured'' may also be used to refer to products that are supplied and identified by the supplier or that are assembled off site by a third party provider. \X\0AHISTORY: This property set replaces the entity IfcManufacturerInformation from previous IFC releases. IFC 2x4: AssemblyPlace property added.
+<br><br><b>ApplicableEntities:</b>IfcElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>ArticleNumber</td><td>IfcIdentifier</td></tr><tr><td>AssemblyPlace</td><td>.P_ENUMERATEDVALUE.</td></tr><tr><td>GlobalTradeItemNumber</td><td>.P_SINGLEVALUE.</td></tr><tr><td>Manufacturer</td><td>IfcLabel</td></tr><tr><td>ModelLabel</td><td>.P_SINGLEVALUE.</td></tr><tr><td>ModelReference</td><td>.P_SINGLEVALUE.</td></tr><tr><td>ProductionYear</td><td>IfcLabel</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_ManufacturerOccurrence</h3>
+Defines properties of individual instances of manufactured products that may be given by the manufacturer.\X\0AHISTORY: IFC 2x4: AssemblyPlace property added. This property does not need to be asserted if Pset_ManufacturerTypeInformation is allocated to the type and the AssemblyPlace property is asserted there.
+<br><br><b>ApplicableEntities:</b>IfcElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AcquisitionDate</td><td>IfcDate</td></tr><tr><td>AssemblyPlace</td><td> other offsite location or on the building site.</td></tr><tr><td>BarCode</td><td>IfcIdentifier</td></tr><tr><td>BatchReference</td><td>IfcIdentifier</td></tr><tr><td>SerialNumber</td><td>IfcIdentifier</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Qto_SpaceBaseQuantities</h3>
+Base quantities that are common to the definition of all occurrences of spaces.
+<br><br><b>ApplicableEntities:</b>IfcSpace
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>FinishCeilingHeight</td><td>.Q_LENGTH.</td></tr><tr><td>FinishFloorHeight</td><td>.Q_LENGTH.</td></tr><tr><td>GrossCeilingArea</td><td>.</td></tr><tr><td>GrossFloorArea</td><td>.Q_AREA.</td></tr><tr><td>GrossPerimeter</td><td>.</td></tr><tr><td>GrossVolume</td><td>.Q_VOLUME.</td></tr><tr><td>GrossWallArea</td><td>.</td></tr><tr><td>Height</td><td>.Q_LENGTH.</td></tr><tr><td>NetCeilingArea</td><td>.</td></tr><tr><td>NetFloorArea</td><td> or other protruding elements. Varying heights are not taking into account (i.e. no reduction for areas under a minimum headroom)</td></tr><tr><td>NetPerimeter</td><td>.Q_LENGTH.</td></tr><tr><td>NetVolume</td><td>.Q_VOLUME.</td></tr><tr><td>NetWallArea</td><td>.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceHeaterTypeRadiator</h3>
+Space heater type radiator attributes.
+<br><br><b>ApplicableEntities:</b>IfcSpaceHeater/RADIATOR
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>RadiatorType</td><td>IfcLabel</td></tr><tr><td>TubingLength</td><td>IfcPositiveLengthMeasure</td></tr><tr><td>WaterContent</td><td>IfcMassMeasure</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SoundGeneration</h3>
+Common definition to capture the properties of sound typically used within the context of building services and flow distribution systems.  This property set is instantiated multiple times on an object for each frequency band.  HISTORY: New property set in IFC Release 2x4.
+<br><br><b>ApplicableEntities:</b>IfcDistributionFlowElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>SoundCurve</td><td>.P_TABLEVALUE.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_PropertyAgreement</h3>
+A property agreement is an agreement that enables the occupation of a property for a period of time.<br>The objective is to capture the information within an  agreement that is relevant to a facilities manager. Design and construction information associated with the property is not considered. A property agreement may be applied to an instance of IfcSpatialStructureElement including to compositions defined through the IfcSpatialStructureElement.Element.CompositionEnum.<br><b>Note</b> that the associated actors are captured by the IfcOccupant class.
+<br><br><b>ApplicableEntities:</b>IfcSpatialStructureElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AgreementType</td><td>IfcLabel</td></tr><tr><td>CommencementDate</td><td>IfcDate</td></tr><tr><td>ConditionCommencement</td><td> broom clean</td></tr><tr><td>ConditionTermination</td><td> broom clean</td></tr><tr><td>Duration</td><td>IfcDuration</td></tr><tr><td>Identifier</td><td>IfcIdentifier</td></tr><tr><td>Options</td><td>IfcText</td></tr><tr><td>PropertyName</td><td>IfcLabel</td></tr><tr><td>Restrictions</td><td>IfcText</td></tr><tr><td>TerminationDate</td><td>IfcDate</td></tr><tr><td>Version</td><td>IfcLabel</td></tr><tr><td>VersionDate</td><td>IfcDate</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceThermalLoad</h3>
+The space thermal load defines all thermal losses and gains occurring within a space or zone.  The thermal load source attribute defines an enumeration of possible sources of the thermal load. The maximum, minimum, time series and app
+<br><br><b>ApplicableEntities:</b>IfcSpace
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AirExchangeRate</td><td>IfcPowerMeasure</td></tr><tr><td>DryBulbTemperature</td><td>IfcPowerMeasure</td></tr><tr><td>EquipmentSensible</td><td>IfcPowerMeasure</td></tr><tr><td>ExhaustAir</td><td>IfcPowerMeasure</td></tr><tr><td>InfiltrationSensible</td><td>IfcPowerMeasure</td></tr><tr><td>Lighting</td><td>IfcPowerMeasure</td></tr><tr><td>People</td><td>IfcPowerMeasure</td></tr><tr><td>RecirculatedAir</td><td>IfcPowerMeasure</td></tr><tr><td>RelativeHumidity</td><td>IfcPowerMeasure</td></tr><tr><td>TotalLatentLoad</td><td> then the thermal load is a gain to the space.</td></tr><tr><td>TotalRadiantLoad</td><td> then the thermal load is a gain to the space.</td></tr><tr><td>TotalSensibleLoad</td><td> then the thermal load is a gain to the space.</td></tr><tr><td>VentilationIndoorAir</td><td>IfcPowerMeasure</td></tr><tr><td>VentilationOutdoorAir</td><td>IfcPowerMeasure</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceHeaterTypeCommon</h3>
+Space heater type common attributes.\X\0ASoundLevel attribute deleted in IFC2x2 Pset Addendum: Use IfcSoundProperties instead.  Properties added in IFC2x4.
+<br><br><b>ApplicableEntities:</b>IfcSpaceHeater
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>BodyMass</td><td>IfcMassMeasure</td></tr><tr><td>EnergySource</td><td>IfcLabel</td></tr><tr><td>HeatTransferDimension</td><td>IfcLabel</td></tr><tr><td>HeatTransferMedium</td><td>IfcLabel</td></tr><tr><td>NumberOfPanels</td><td>IfcInteger</td></tr><tr><td>NumberOfSections</td><td>.P_SINGLEVALUE.</td></tr><tr><td>OutputCapacity</td><td>IfcPowerMeasure</td></tr><tr><td>PlacementType</td><td>IfcLabel</td></tr><tr><td>Reference</td><td>.P_SINGLEVALUE.</td></tr><tr><td>Status</td><td> "Existing" - element exists and remains</td></tr><tr><td>TemperatureClassification</td><td> usually heated by gas or steam.</td></tr><tr><td>ThermalEfficiency</td><td>IfcNormalisedRatioMeasure</td></tr><tr><td>ThermalMassHeatCapacity</td><td>IfcReal</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_ServiceLife</h3>
+Captures the period of time that an artifact will last along with various factors that impact the expected service life.  HISTORY: Introduced in IFC2X4 as replacement for IfcServiceLife and IfcServiceLifeFactor.
+<br><br><b>ApplicableEntities:</b>IfcElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>DesignLevel</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>InUseConditions</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>IndoorEnvironment</td><td>.P_BOUNDEDVALUE.</td></tr><tr><td>MaintenanceLevel</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>MeanTimeBetweenFailure</td><td>IfcDuration</td></tr><tr><td>OutdoorEnvironment</td><td>.P_BOUNDEDVALUE.</td></tr><tr><td>QualityOfComponents</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>ServiceLifeDuration</td><td>IfcDuration</td></tr><tr><td>ServiceLifeType</td><td>IfcLabel</td></tr><tr><td>WorkExecutionLevel</td><td>IfcPositiveRatioMeasure</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_Warranty</h3>
+An assurance given by the seller or provider of an artefact that the artefact is without defects and will operate as described for a defined period of time without failure and that if a defect does arise during that time, that it will be corrected by the seller or provider.
+<br><br><b>ApplicableEntities:</b>IfcElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>Exclusions</td><td>.P_SINGLEVALUE.</td></tr><tr><td>IsExtendedWarranty</td><td>.P_SINGLEVALUE.</td></tr><tr><td>PointOfContact</td><td>.P_REFERENCEVALUE.</td></tr><tr><td>WarrantyContent</td><td>IfcText</td></tr><tr><td>WarrantyEndDate</td><td>IfcDate</td></tr><tr><td>WarrantyIdentifier</td><td>IfcIdentifier</td></tr><tr><td>WarrantyPeriod</td><td>IfcTimeMeasure</td></tr><tr><td>WarrantyStartDate</td><td>IfcDate</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_SpaceHeaterTypeConvector</h3>
+Space heater type convector attributes.
+<br><br><b>ApplicableEntities:</b>IfcSpaceHeater/CONVECTOR
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>ConvectorType</td><td>.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_Condition</h3>
+Determines the state or condition of an element at a particular point in time.
+<br><br><b>ApplicableEntities:</b>IfcElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AssessmentCondition</td><td> OK</td></tr><tr><td>AssessmentDate</td><td>IfcDate</td></tr><tr><td>AssessmentDescription</td><td>IfcText</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Qto_SpaceHeaterBaseQuantities</h3>
+Base quantities that are common to the definition of all types of space heaters.
+<br><br><b>ApplicableEntities:</b>IfcSpaceHeater
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>GrossWeight</td><td>.Q_WEIGHT.</td></tr><tr><td>Length</td><td>.Q_LENGTH.</td></tr><tr><td>NetWeight</td><td>.Q_WEIGHT.</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_ElectricalDeviceTypeCommon</h3>
+A collection of properties that are commonly used by electrical device types.
+<br><br><b>ApplicableEntities:</b>IfcDistributionElement
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>ConductorFunction</td><td>. Protective Earth is sometimes also known as CPC or common protective conductor. Note that for an electrical device</td></tr><tr><td>HasProtectiveEarth</td><td>.P_SINGLEVALUE.</td></tr><tr><td>IP_Code</td><td>.P_SINGLEVALUE.</td></tr><tr><td>InsulationStandardClass</td><td> as well as other factors. Also indicates whether the electrical device has a protective earth connection.</td></tr><tr><td>NominalFrequencyRange</td><td>IfcFrequencyMeasure</td></tr><tr><td>NumberOfPoles</td><td>IfcInteger</td></tr><tr><td>PowerFactor</td><td>IfcNormalisedRatioMeasure</td></tr><tr><td>RatedCurrent</td><td>IfcElectricCurrentMeasure</td></tr><tr><td>RatedVoltage</td><td>IfcElectricVoltageMeasure</td></tr></tbody></table>
+<hr><br>
+<div class="documentaion">
+<h3>Pset_AirSideSystemInformation</h3>
+Attributes that apply to an air side HVAC system. HISTORY: New property set in IFC Release 1.0.
+<br><br><b>ApplicableEntities:</b>IfcSpace,IfcZone,IfcSpatialZone
+</div><br>
+<table><tbody><tr><th>Name</th><th>PrimaryMeasureType</th></tr><tr><td>AirSideSystemDistributionType</td><td>.P_ENUMERATEDVALUE.</td></tr><tr><td>AirSideSystemType</td><td>.P_ENUMERATEDVALUE.</td></tr><tr><td>AirflowSensible</td><td>IfcVolumetricFlowRateMeasure</td></tr><tr><td>ApplianceDiversity</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>CoolingTemperatureDelta</td><td>IfcThermodynamicTemperatureMeasure</td></tr><tr><td>Description</td><td>IfcLabel</td></tr><tr><td>EnergyGainSensible</td><td>.P_SINGLEVALUE.</td></tr><tr><td>EnergyGainTotal</td><td>.P_SINGLEVALUE.</td></tr><tr><td>EnergyLoss</td><td>IfcPowerMeasure</td></tr><tr><td>FanPower</td><td>IfcPowerMeasure</td></tr><tr><td>HeatingTemperatureDelta</td><td>IfcThermodynamicTemperatureMeasure</td></tr><tr><td>InfiltrationDiversitySummer</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>InfiltrationDiversityWinter</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>LightingDiversity</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>LoadSafetyFactor</td><td>IfcPositiveRatioMeasure</td></tr><tr><td>Name</td><td>IfcLabel</td></tr><tr><td>TotalAirflow</td><td>.P_SINGLEVALUE.</td></tr><tr><td>Ventilation</td><td>IfcVolumetricFlowRateMeasure</td></tr></tbody></table>
+<hr><br>
+</body></html>

@@ -1,0 +1,21 @@
+guid='09J1uq7w9CKBQZ1pcl5uIO'
+load_schema_and_extensions
+Server.ModelsList.each { |model|
+$hash={}
+obj=nil
+if BIMModel.new(model).load_guids 
+  use model if $guids[guid] != nil     
+else
+    use model    
+end    
+$hash.each { |id,data|
+if data.include?(guid)
+    HTML.h4 model 
+    obj = id.to_obj
+    puts obj.show
+    IFCRELDEFINESBYPROPERTIES.where("all","o").each { |o|
+    puts o.relatingPropertyDefinition.to_obj.property_details if  obj != nil and o.relatedObjects.to_s.include?("#" + obj.line_id.to_s)}
+    break
+end}
+break if obj != nil # remove this line if you want to keep looking after finding the first result
+}
